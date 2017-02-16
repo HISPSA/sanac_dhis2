@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../dhis-web-commons/javascripts/jQuery/ui/css/redmond/jquery-ui.css">
+<link href="../dhis-web-commons/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<h1 align=center>Thembisa Report</h1>
+
+<h2 align=center>Demographics</h2>
+
+<div>
+<input type='button' value='Show table' id='popSizeButton'></input>
+<div id='populationSize' style="width:1300px; height:400px">Population size</div>
+</div>
+
+<h2 align=center>Mortality statistics</h2>
+<input type='button' value='Show table' id='totalAIDSdeathButton'></input>
+<div id='totalAIDSdeath' style="width:1700px; height:400px">Total AIDS vs Non Aids Deaths</div>
+
+<input type='button' value='Show table' id='deathsAIDS2011aButton'></input>
+<div id='deathsAIDS2011a' style="width:1700px; height:400px"></div>
+
+<input type='button' value='Show table' id='deathsAIDSinChildrenButton'></input>
+<div id='deathsAIDSinChildren' style="width:1300px; height:400px">AIDS deaths in children</div>
+
+<input type='button' value='Show table' id='lifeExpectancyByBirthTotalButton'></input>
+<div id='lifeExpectancyByBirthTotal' style="width:1300px; height:400px">Life expectancy at birth</div>
+
+<input type='button' value='Show table' id='lifeExpectancyByBirthMFButton'></input>
+<div id='lifeExpectancyByBirth2011a' style="width:1700px; height:400px"></div>
+
+<h2 align=center>HIV incidence statistics</h2>
+<input type='button' value='Show table' id='newInfectionsAcquiredSexuallyTotalButton'></input>
+<div id='newInfectionsAcquiredSexuallyTotal' style="width:1300px; height:400px">New infections acquired sexually</div>
+
+<input type='button' value='Show table' id='newInfectionsAcquiredSexuallyMFButton'></input>
+<div id='newInfectionsAcquiredSexuallyMF' style="width:1700px; height:400px"></div>
+
+<input type='button' value='Show table' id='newInfectionsAcquiredSexuallyAgeButton'></input>
+<div id='newInfectionsAcquiredSexuallyAge' style="width:1700px; height:400px"></div>
+
+<input type='button' value='Show table' id='totalNewHIVInfectionsButton'></input>
+<div id='totalNewHIVInfections' style="width:1300px; height:400px">Total new HIV infections</div>
+
+<input type='button' value='Show table' id='incidenceHIVRateButton'></input>
+<div id='incidenceHIVRate' style="width:1300px; height:400px">HIV Incidence rate</div>
+
+<input type='button' value='Show table' id='incidenceRateByAgeSexButton'></input>
+<div id='incidenceRateByAgeSex' style="width:1700px; height:400px">HIV Incidence rate Age and Sex *</div>
+
+<h2 align=center>HIV prevalence statistics</h2>
+<input type='button' value='Show table' id='totalHIVInfectionsButton'></input>
+<div id='totalHIVInfections' style="width:1300px; height:400px">Total HIV Infections</div>
+
+<input type='button' value='Show table' id='prevelanceHIVTotalButton'></input>
+<div id='prevelanceHIVTotal' style="width:1300px; height:400px">Total HIV Prevalence</div>
+
+<input type='button' value='Show table' id='prevelanceHIVAgeButton'></input>
+<div id='prevelanceHIVAge' style="width:1700px; height:400px"></div>
+
+<input type='button' value='Show table' id='prevelanceByAgeSexButton'></input>
+<div id='prevelanceByAgeSex'>HIV Prevalence By Age and Gender</div>
+
+<input type='button' value='Show table' id='totalHIVPrevalencePregnantWomanButton'></input>
+<div id='totalHIVPrevalencePregnantWoman' style="width:1300px; height:400px">Total HIV Prevalence Pregnant Women</div>
+
+<input type='button' value='Show table' id='prevelenceHIVpregnantByAgeButton'></input>
+<div id='prevelenceHIVpregnantByAge' style="width:1700px; height:400px"></div>
+
+<input type='button' value='Show table' id='prevelenceHIVFemaleSexWorkersButton'></input>
+<div id='prevelenceHIVFemaleSexWorkers' style="width:1300px; height:400px">HIV Prevalence Female Sex Workers</div>
+
+<h2 align=center>ARV Treatment and unmet need</h2>
+<input type='button' value='Show table' id='totalARTpatientsButton'></input>
+<div id='totalARTpatients' style="width:1300px; height:400px">Total number of ART patients</div>
+
+<input type='button' value='Show table' id='totalChildrenOnARTButton'></input>
+<div id='totalChildrenOnART' style="width:1300px; height:400px">Total number of children on ART</div>
+
+<input type='button' value='Show table' id='total15Art2011aButton'></input>
+<div id='total15Art2011a' style="width:1700px; height:400px"></div>
+
+<input type='button' value='Show table' id='cumulativeStartedARTButton'></input>
+<div id='cumulativeStartedART' style="width:1300px; height:400px">Cumulative number started ART</div>
+
+<input type='button' value='Show table' id='enrollmentARTratioButton'></input>
+<div id='enrollmentARTratio' style="width:1300px; height:400px">ART Enrollment Ratio</div>
+
+<input type='button' value='Show table' id='enrollmentARTAdultVSChildrenButton'></input>
+<div id='enrollmentARTAdultVSChildren' style="width:1300px; height:400px">ART Enrollment Ratio Children</div>
+
+
+<script type="text/javascript" src="../dhis-web-commons/javascripts/jQuery/jquery.min.js"></script>
+<script type="text/javascript" src="../dhis-web-commons/javascripts/jQuery/ui/jquery-ui.min.js"></script>
+<script src="../dhis-web-commons/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../dhis-web-visualizer/chart.js"></script>
+	<!-- <script type="text/javascript" src="../dhis-web-mapping/map.js"></script> -->
+	<script type="text/javascript" src="../dhis-web-pivot/reporttable.js"></script>
+	<script type="text/javascript" src="../dhis-web-reporting/javascript/table.js"></script>
+	<script type="text/javascript" src="../dhis-web-reporting/javascript/report.js"></script>
+<script type="text/javascript">
+
+var orgUnit = dhis2.report.organisationUnit;
+var orgUnitHierarchy = dhis2.report.organisationUnitHierarchy;
+var orgUnitChildren = dhis2.report.organisationUnitChildren;
+var period = dhis2.report.periods[0];
+var base = '../';
+
+chartPlugin.url = base;
+reportTablePlugin.url = base;
+var pe = [ {id : '2000' },{id : '2001' },{id : '2002' },{id : '2003' },{id : '2004' },{id : '2005' }, {id : '2006' }, {id : '2007' }, {id : '2008' }, {id : '2009' }, {id : '2010' },{id : 'LAST_5_YEARS' } ];
+
+function renderTable(itemValues, elValue, buttonId){
+	
+	reportTablePlugin.load([{
+	columns :  [ {dimension : 'pe',items : pe } ],
+	rows: [{dimension : "dx",items: itemValues }],
+	  filters: [{dimension: "ou",items: [{id: orgUnit.id }]} ],
+	  showColTotals: false,
+	  showRowTotals: false,
+	  url: base,
+	  el: elValue
+	}]);
+	
+var elem = document.getElementById(buttonId);
+
+	elem.value = "Show chart";
+	elem.onclick = function(){renderChart(itemValues, elValue, buttonId)};
+
+}	 
+
+function renderChart(itemValues, elValue, buttonId){
+
+chartPlugin.load([{
+		columns: [{dimension : "dx",items: itemValues }],
+		rows :  [ {dimension : 'pe',items : pe } ],
+ 		filters: [{dimension: "ou",items: [{id: orgUnit.id }]} ],
+ 		url: base,
+ 		el: elValue
+	}]);
+
+
+ var elem = document.getElementById(buttonId);
+		elem.value = "Show table";
+		elem.onclick = function(){renderTable(itemValues, elValue, buttonId)};
+}
+
+	//Population size
+	renderChart([{id:"IFYumLRGWRo"}], "populationSize","popSizeButton");
+	//total AIDS vs non AIDS
+	renderChart([{id:"qR3Abys8uEP"}, {id:"V90mz01RsUM"}],"totalAIDSdeath","totalAIDSdeathButton");
+	//***************************Mortality
+	//AIDS deaths > 15
+	renderChart([{id:"EKIxIlsirHJ.oa0TQEBOTSc"},{id:"EKIxIlsirHJ.EzyqzEZWZnJ"}] ,"deathsAIDS2011a","deathsAIDS2011aButton");
+	//AIDS deaths in Children
+	renderChart([{id:"qgwUnv5fcSW"}], "deathsAIDSinChildren","deathsAIDSinChildrenButton");
+	//Life Expectancy by Birth Total
+	renderChart([{id:"phWtesCvycE"}], "lifeExpectancyByBirthTotal","lifeExpectancyByBirthTotalButton");
+	//Life Expectancy by Birth M/F
+	renderChart([{id:"OBHa1EZIul5.pQjZpj4ilDK"},{id:"OBHa1EZIul5.YUA5CHfbhwq"}], "lifeExpectancyByBirth2011a","lifeExpectancyByBirthMFButton");
+	//**************************HIV incidence
+	renderChart([{id:"h45lBkSAtP0"}], "newInfectionsAcquiredSexuallyTotal","newInfectionsAcquiredSexuallyTotalButton");
+	//New infections acquired sexually Male Female
+	renderChart([{id:"iozfzh2dC6h.pQjZpj4ilDK"},{id:"iozfzh2dC6h.YUA5CHfbhwq"}], "newInfectionsAcquiredSexuallyMF","newInfectionsAcquiredSexuallyMFButton");
+	//Total new HIV infections
+	renderChart([{id:"hx8efK5D2Gs"}], "totalNewHIVInfections","totalNewHIVInfectionsButton");
+	//HIV Incidence rate By Age
+	renderChart([{id:"MGqBBU8kibv.gnJcA3yEdz4"},{id:"MGqBBU8kibv.L26yqG42oU3"}], "newInfectionsAcquiredSexuallyAge","newInfectionsAcquiredSexuallyAgeButton");
+	//HIV Incidence rate Age And Sex
+	renderChart([{id:"pdLiE6WwLwI.qwEwjAjN8OZ"},{id:"pdLiE6WwLwI.HLZyDsoEyPX"},{id:"pdLiE6WwLwI.Xj3Deo3USki"},{id:"pdLiE6WwLwI.f3kON4P4Cn4"}], "incidenceRateByAgeSex","incidenceRateByAgeSexButton");
+	//HIV Incidence rate
+	renderChart([{id:"C0PBdfC4btx"}], "incidenceHIVRate","incidenceHIVRateButton");
+	//Total HIV infections
+	renderChart([{id:"SmxuLTOhkF7"}], "totalHIVInfections","totalHIVInfectionsButton");
+	
+	//**************************HIV prevelance
+	//Total HIV Prevalence
+	renderChart([{id:"PglhMTd8fvB"}], "prevelanceHIVTotal","prevelanceHIVTotalButton");
+	//Total HIV Prevalence by Age
+	renderChart([{id:"rYBiDF7SmK0.TV0X2sakUmo"},{id:"rYBiDF7SmK0.U8S5BHdhv3c"},{id:"rYBiDF7SmK0.DYLmlpJAml4"},{id:"rYBiDF7SmK0.dcauDEFCa6X"},{id:"rYBiDF7SmK0.LXk3VF5LQUp"}], "prevelanceHIVAge","prevelanceHIVAgeButton");
+	//Total HIV Prevalence by Gender and age
+	renderChart([{id:"caLtP8fGUAK.OOE8FBVJW1a"},{id:"caLtP8fGUAK.WjQP0XFugNO"},{id:"caLtP8fGUAK.hmwtmE3agJv"},{id:"caLtP8fGUAK.Zq8xWAtktn1"},{id:"caLtP8fGUAK.G3iNRfQIS55"},{id:"caLtP8fGUAK.XwXnccxYawk"},{id:"caLtP8fGUAK.VoBPSJrBz3v"},{id:"caLtP8fGUAK.eyc27aXyZqH"}], "prevelanceByAgeSex","prevelanceByAgeSexButton");
+	//Total HIV Prevalence pregnant woman
+	renderChart([{id:"izKyBkXW57L"}], "totalHIVPrevalencePregnantWoman","totalHIVPrevalencePregnantWomanButton");
+	//Total HIV Prevalence pregnant woman by Age
+	renderChart([{id:"librTRA3rn0.WS5aSJL79NC"},{id:"librTRA3rn0.Vm07OPEvTQY"},{id:"librTRA3rn0.gb57tXv99Rl"},{id:"librTRA3rn0.jG6njYxIiPf"},{id:"librTRA3rn0.HX5814IdMeP"},{id:"librTRA3rn0.PWObhUHPFkQ"}], "prevelenceHIVpregnantByAge","prevelenceHIVpregnantByAgeButton");
+	//HIV Prevelence Female Sex workers
+	renderChart([{id:"nQGxSEstViz"}], "prevelenceHIVFemaleSexWorkers","prevelenceHIVFemaleSexWorkersButton");
+	
+	//**************************ARV Treatment and unmet need
+	//Total number of ART patients
+	renderChart([{id:"SaeQeN5QrRS"}], "totalARTpatients","totalARTpatientsButton");
+	//Total number of children on ART
+	renderChart([{id:"INC4sxKKnwH"}], "totalChildrenOnART","totalChildrenOnARTButton");
+	//Total number (15) on ART - Male Female
+	renderChart([{id:"tPnXnJybSFF.pQjZpj4ilDK"},{id:"tPnXnJybSFF.YUA5CHfbhwq"}], "total15Art2011a","total15Art2011aButton");
+	//Cumulative number started ART -
+	renderChart([{id: "NxiYBa2VtC7"}], "cumulativeStartedART","cumulativeStartedARTButton");
+	// ART emrollment ratio
+	renderChart([{id: "j4ySrwZL8K1"}], "enrollmentARTratio","enrollmentARTratioButton");
+	//ART Enrollment ADULT VS Children
+	renderChart([{id: "LWSDvpOzVdQ"}], "enrollmentARTAdultVSChildren","enrollmentARTAdultVSChildrenButton");
+	
+
+</script>
+
+</body>
+</html>

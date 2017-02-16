@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../dhis-web-commons/javascripts/ext/resources/css/ext-plugin-gray.css" />
+</head>
+<body>
+
+<h2>Socio-Demographics</h2>
+
+<div id="populationSize" style="width:1300px; height:400px">Population size</div>
+<div id="populationMap" style="width:800px; height:400px">Population 2016</div>
+
+<!--  <div id="popDistribution" style="width:800px; height:200px">Population distribution Pie Chart</div> -->
+
+<div id="popGroup" style="width:800px; height:400px">Population Group</div>
+<div id="popGroupTable">Population Group</div>
+<br>
+<div id="popByAge" >Population by age</div>
+<br>
+<div id="HIVKnowledge" style="width:800px; height:400px">HIV Knowledge</div>
+<div id="HIVKnowledgeTable">HIV Knowledge</div>
+
+<div id="maritalStatus" style="width:800px; height:400px">Marital Status</div>
+<div id="maritalStatusTable">Marital Status</div>
+
+<div id="intergenerationalSex" style="width:800px; height:400px">Intergenerational Sex</div>
+<div id="intergenerationalSexTable">Intergenerational Sex</div>
+
+<div id="HIVRiskPerception" style="width:800px; height:400px">HIV Risk Perception</div>
+<div id="HIVRiskPerceptionTable">HIV Risk Perception</div>
+
+<div id="sexualPartners" style="width:800px; height:400px">Sexual Partners</div>
+<div id="sexualPartnersTable">Sexual Partners</div>
+
+<div id="sexualDebutAge" style="width:800px; height:400px">Sexual Debut Age</div>
+<div id="sexualDebutAgeTable">Sexual Debut Age</div>
+
+<div id="condomUse" style="width:800px; height:400px">Condom Use</div>
+<div id="condomUseTable">Condom Use</div>
+<br>
+<div id="commsBySex" >Communication by Sex</div>
+<br>
+<div id="HeadcountSAMPI" style="width:800px; height:400px">SAMPI Headcount</div>
+<div id="headcountSAMPITable">SAMPI Headcount</div>
+
+<!-- Script libraries -->
+<script type="text/javascript" src="../dhis-web-commons/javascripts/jQuery/jquery.min.js"></script>
+<script type="text/javascript" src="../dhis-web-commons/javascripts/jQuery/ui/jquery-ui.min.js"></script>
+
+<script type="text/javascript" src="../dhis-web-commons/javascripts/ext/ext-all.js"></script>
+<script src="../dhis-web-commons/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../dhis-web-visualizer/chart.js"></script>
+<script type="text/javascript" src="../dhis-web-mapping/map.js"></script>
+<script type="text/javascript" src="../dhis-web-pivot/reporttable.js"></script>
+<script type="text/javascript" src="../dhis-web-reporting/javascript/table.js"></script>
+<script type="text/javascript" src="../dhis-web-reporting/javascript/report.js"></script>
+
+<script type="text/javascript">
+		
+var orgUnit = dhis2.report.organisationUnit;
+var orgUnitHierarchy = dhis2.report.organisationUnitHierarchy;
+var orgUnitChildren = dhis2.report.organisationUnitChildren;
+var period = dhis2.report.periods[0];
+var censusPeriod = '2011';
+var HSRCsurveyPeriod = '2012';
+
+var base = '../';
+
+console.log
+chartPlugin.url = base;
+reportTablePlugin.url = base;
+
+var populationSize = {
+	columns: [{"dimension": "dx",items: [{"id": "IFYumLRGWRo","name": "Population size"}]}],
+	rows: [{"dimension": "pe","items": [{"id": "2011","name": "2011"},{id: "2012","name": "2012"},
+		                  {"id": "2013","name": "2013"},{"id": "2014","name": "2014"},
+		                  {"id": "2015","name": "2015"},{"id": "2016","name": "2016"},
+		                  {"id": "2017","name": "2017"}]}],
+	filters: [{"dimension": "ou","items": [{id: orgUnit.id}]}],
+	type: "column",
+	regressionType: "LINEAR",
+	url: base,
+	el: "populationSize"
+};
+
+var popGroup = {
+	  columns: [{dimension: "pe","items": [{id: censusPeriod}]}],
+	  rows: [{dimension: "dx","items": [{"id": "zSJ3Zw3Cnyb.riXFFImhR5D","name": "Population Groups Asian"},
+	        {"id": "zSJ3Zw3Cnyb.VBgPP6T0hIJ","name": "Population Groups Black African"},
+	        {"id": "zSJ3Zw3Cnyb.EOvlLvxtFRN","name": "Population Groups Coloured"},
+	        {"id": "zSJ3Zw3Cnyb.jge8DNFAk2M","name": "Population Groups Other"},
+	        {"id": "zSJ3Zw3Cnyb.IjO8a66WhZi","name": "Population Groups White"}]}],
+	  filters: [{dimension: "ou",items: [{id: orgUnit.id}]}],
+	  type: "pie",
+	  url: base,
+	  el: "popGroup"
+	};
+
+var popGroupTable = {
+	  columns: [{"dimension": "oEU6GPBFQsZ","items": [{"id": "pOKzmFKmRy6","name": "Coloured"},
+	                  {"id": "s1rMZViYmbU","name": "Asian"},
+	                  {"id": "wgmu6MyZbO4","name": "Black African"},
+	                  {"id": "fVkcOWjhSmY","name": "Other Group"},
+	                  {"id": "JsWnrn64cdr","name": "White"}]}],
+	  rows: [{dimension: "ou",items: orgUnitChildren}],
+	  filters: [{"dimension": "dx","items": [{"id": "zSJ3Zw3Cnyb","name": "Population Groups"}]},
+	              {"dimension": "pe","items": [{id: censusPeriod}]}],
+	  url: base,
+	  el: "popGroupTable"
+	  };
+	  
+	          
+var HIVKnowledge = {
+	columns: [{"dimension": "ou","items": [{id: orgUnit.id}]}],
+	rows: [{"dimension": "dx","items": [{"id": "IIi05gKF6hT.LItruyT67H4","name": "Knowledge of HIV No"},
+	                             	        {"id": "IIi05gKF6hT.IAhHhwX7Tw8","name": "Knowledge of HIV Yes"}]}],
+	  filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	  type: "pie",
+	  url: base,
+	  el: "HIVKnowledge"
+	};
+
+var HIVKnowledgeTable = {
+	columns: [{"dimension": "b2wEvd3c0Y5","items": [{"id": "zFajuKhKrYx","name": "Yes"},
+		                  {"id": "FpNxkyEgIA7","name": "No"}]}],
+	rows: [{"dimension": "ou","items": orgUnitChildren}],
+	filters: [{"dimension": "dx","items": [{"id": "IIi05gKF6hT","name": "Knowledge of HIV"}]},
+		     {"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	url: base,
+	el: "HIVKnowledgeTable"
+	};
+	
+var maritalStatus = {
+	columns: [{"dimension": "ou","items": [{id: orgUnit.id}]}],
+	rows: [{"dimension": "dx","items": [{"id": "hB48tzPjOKG.ptFp3qHVFer","name": "Marital Status Married/cohabit"},
+	                           	        {"id": "hB48tzPjOKG.goPEtSb8Z17","name": "Marital Status Single"}]}],
+	filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	type: "pie",
+	url: base,
+	el: "maritalStatus"
+	};
+
+var maritalStatusTable = {
+	columns: [{"dimension": "LkTWyXmZTMk","items": [{"id": "bjKtwC7ypRe","name": "Single"},
+		      {"id": "APAYkAObDKt","name": "Married/cohabit"}]}],
+		rows: [{"dimension": "ou","items": orgUnitChildren }],
+		filters: [{"dimension": "dx","items": [{"id": "hB48tzPjOKG","name": "Marital Status"}]},
+		          {"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+		url: base,
+		el: "maritalStatusTable"
+		};
+	
+var intergenerationalSex = {
+		columns: [{"dimension": "ou","items": [{id: orgUnit.id}]}],
+		rows: [{"dimension": "dx","items": [{"id": "mLQgI27U3g7.P8p1hlB9siR","name": "Intergenerational sex (sex partner's age) Five or more years younger"},
+	                             	        {"id": "mLQgI27U3g7.tAcyHuJ50jW","name": "Intergenerational sex (sex partner's age) Within 5 years"},
+	                             	        {"id": "mLQgI27U3g7.uSuRlHyPjz2","name": "Intergenerational sex (sex partner's age) Five or more years older"}]}],
+	  filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	  type: "pie",
+	  url: base,
+	  el: "intergenerationalSex"
+	};
+
+var intergenerationalSexTable = {
+	columns: [{"dimension": "dx","items": [{"id": "mLQgI27U3g7","name": "Intergenerational sex (sex partner's age)"}]},
+		              {"dimension": "gPO61f4NoxI","items": [{"id": "nTGgjhyUreP","name": "Within 5 years"},
+		                  {"id": "Hg7ReSS3si7","name": "Five or more years older"},
+		                  {"id": "JWt1ozImV5U","name": "Five or more years younger"}]}],
+	rows: [{"dimension": "ou","items": orgUnitChildren}],
+	filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	showColTotals: false,
+	showRowTotals: false,
+	url: base,
+	el: "intergenerationalSexTable"
+	};
+		          
+var HIVRiskPerception = {
+
+		columns: [{"dimension": "ou","items": [{id: orgUnit.id}]}],
+		rows: [{"dimension": "dx","items": [{"id": "ftBpq7mrQZF.nNByBVJPrRn","name": "HIV Risk Perception High Risk"},
+	                             	        {"id": "ftBpq7mrQZF.qSjiPanSgvi","name": "HIV Risk Perception Low Risk"}]}],
+	  filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	  type: "pie",
+	  url: base,
+	  el: "HIVRiskPerception"
+	};
+
+var HIVRiskPerceptionTable = {
+	columns: [{"dimension": "dx","items": [{"id": "ftBpq7mrQZF","name": "HIV Risk Perception"} ]},
+			    {"dimension": "zU0DabrBe8l","items": [{"id": "McNNImBkMkl","name": "Low Risk"},
+			        {"id": "D7ffAbCpxOc","name": "High Risk"}]}],
+	rows: [{"dimension": "ou","items": orgUnitChildren}],
+	filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	showColTotals: false,
+	showRowTotals: false,
+	url: base,
+	el: "HIVRiskPerceptionTable"
+			
+}
+
+var sexualPartners = {
+	  
+		columns: [{"dimension": "ou","items": [{id: orgUnit.id}]}],
+		rows: [{"dimension": "dx","items": [{"id": "eya8zuWQscw.MEiFHuMBIPZ","name": "Sexual partners in last 12 months One partner"},
+	                             	        {"id": "eya8zuWQscw.Hg9j0P9bx1f","name": "Sexual partners in last 12 months Two or more partners"}]}],
+	  filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	  type: "pie",
+	  url: base,
+	  el: "sexualPartners"
+	};
+
+var sexualPartnersTable = {
+	columns: [{"dimension": "dx","items": [{"id": "eya8zuWQscw","name": "Sexual partners in last 12 months"}]},
+		              {"dimension": "d6EqiraC3HR","items": [{"id": "E3kLXrVYDsk","name": "One partner"},
+		              {"id": "HballPjOpyT","name": "Two or more partners"}]}],
+	rows: [{"dimension": "ou","items": orgUnitChildren}],
+	filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	showColTotals: false,
+	showRowTotals: false,
+	url: base,
+	el: "sexualPartnersTable"
+	}
+	
+	
+var sexualDebutAge = {
+	  
+		columns: [{"dimension": "ou","items": [{id: orgUnit.id}]}],
+		rows: [{"dimension": "dx","items": [{"id": "miqbDb24jR7.m7B7gDq9KPi","name": "Age at sexual debut <15"},
+	                             	        {"id": "miqbDb24jR7.LKUhwP6VA1j","name": "Age at sexual debut >=15"}]}],
+	  filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	  type: "pie",
+	  url: base,
+	  el: "sexualDebutAge"
+	};
+
+var sexualDebutAgeTable = {
+	columns: [{"dimension": "dx","items": [{"id": "miqbDb24jR7","name": "Age at sexual debut"}]},
+		              {"dimension": "ZRLw0mC3n6q","items": [{"id": "lZZlant3YsU","name": "<15"},
+		                  {"id": "o8KAKvIc0GG","name": ">=15"}]}],
+	rows: [{"dimension": "ou","items": orgUnitChildren}],
+	filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	showColTotals: false,
+	showRowTotals: false,
+	url: base,
+	el: "reportTable1"
+		          }
+
+var condomUse = {
+	  
+		columns: [{"dimension": "ou","items": [{id: orgUnit.id}]}],
+		rows: [{"dimension": "dx","items": [{"id": "zE9gZCPXeeu.LItruyT67H4","name": "Condom use last sex act No"},
+	                             	        {"id": "zE9gZCPXeeu.IAhHhwX7Tw8","name": "Condom use last sex act Yes"}]}],
+	  filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	  type: "pie",
+	  url: base,
+	  el: "condomUse"
+	};
+
+var condomUseTable = {
+	columns: [{"dimension": "dx","items": [{"id": "zE9gZCPXeeu","name": "Condom use last sex act"}]},
+		              {"dimension": "b2wEvd3c0Y5","items": [{"id": "zFajuKhKrYx","name": "Yes"},
+		              {"id": "FpNxkyEgIA7","name": "No"}]}],
+	rows: [{"dimension": "ou","items": orgUnitChildren}],
+	filters: [{"dimension": "pe","items": [{id: HSRCsurveyPeriod}]}],
+	showColTotals: false,
+	showRowTotals: false,
+	url: base,
+	el: "condomUseTable"
+	}
+
+var headcountSAMPI = {
+	  
+		columns: [{"dimension": "ou","items": [{id: orgUnit.id}]}],
+		rows: [{"dimension": "dx","items": [{"id": "hnURckDpaKa.HllvX50cXC0","name": "SAMPI Headcount"},
+	                             	        {"id": "g54tPIWO6pk.HllvX50cXC0","name": "SAMPI Intensity"}]}],
+	  filters: [{"dimension": "pe","items": [{id: censusPeriod}]}],
+	  type: "pie",
+	  url: base,
+	  el: "HeadcountSAMPI"
+	};
+
+var headcountSAMPITable = {
+	columns: [{"dimension": "dx","items": [{"id": "hnURckDpaKa","name": "SAMPI Headcount"},
+		                  {"id": "g54tPIWO6pk","name": "SAMPI Intensity"}]}],
+	rows: [{"dimension": "ou","items": orgUnitChildren}],
+	filters: [{"dimension": "pe","items": [{id: censusPeriod}]}],
+	showColTotals: false,
+	showRowTotals: false,
+	url: base,
+	el: "headcountSAMPITable"
+	}
+
+chartPlugin.load([populationSize, popGroup, HIVKnowledge, maritalStatus, intergenerationalSex, 
+                  HIVRiskPerception, sexualPartners, sexualDebutAge, condomUse, headcountSAMPI]);
+
+ var popAgeTable = {
+	  columns: [{"dimension": "dx","items": [{"id": "eGWVMn2WXtd.TIQWX8NZRSZ","name": "Population by Age by Ward 0-4"},
+	        {"id": "eGWVMn2WXtd.rYly5JbyJ6o","name": "Population by Age by Ward 10-14"},
+	        {"id": "eGWVMn2WXtd.R4xe1C7RvjE","name": "Population by Age by Ward 100-104"},
+	        {"id": "eGWVMn2WXtd.m7jW2Lzg1YX","name": "Population by Age by Ward 105-109"},
+	        {"id": "eGWVMn2WXtd.JDnty1hEHGi","name": "Population by Age by Ward 110-114"},
+	        {"id": "eGWVMn2WXtd.hNJdaoQdyCa","name": "Population by Age by Ward 115+"},
+	        {"id": "eGWVMn2WXtd.LS3DYzl6E6Z","name": "Population by Age by Ward 15-19"},
+	        {"id": "eGWVMn2WXtd.EFqMtcqNldM","name": "Population by Age by Ward 20-24"},
+	        {"id": "eGWVMn2WXtd.pi8KAzcqFZb","name": "Population by Age by Ward 25-29"},
+	        {"id": "eGWVMn2WXtd.OInLBOPkfng","name": "Population by Age by Ward 30-34"},
+	        {"id": "eGWVMn2WXtd.GoRSe9muwbt","name": "Population by Age by Ward 35-39"},
+	        {"id": "eGWVMn2WXtd.tPa60SM1jo5","name": "Population by Age by Ward 40-44"},
+	        {"id": "eGWVMn2WXtd.bzUO2mvB1ft","name": "Population by Age by Ward 45-49"},
+	        {"id": "eGWVMn2WXtd.AvDtV7lhrL4","name": "Population by Age by Ward 5-9"},
+	        {"id": "eGWVMn2WXtd.uyIk7MHzYKr","name": "Population by Age by Ward 50-54"},
+	        {"id": "eGWVMn2WXtd.OGBhmDyro82","name": "Population by Age by Ward 55-59"},
+	        {"id": "eGWVMn2WXtd.uzr71DcQRZ2","name": "Population by Age by Ward 60-64"},
+	        {"id": "eGWVMn2WXtd.DdADXYkfYE7","name": "Population by Age by Ward 65-69"},
+	        {"id": "eGWVMn2WXtd.JbXp0avySrM","name": "Population by Age by Ward 70-74"},
+	        {"id": "eGWVMn2WXtd.PBy9XO7DvjD","name": "Population by Age by Ward 75-79"},
+	        {"id": "eGWVMn2WXtd.LPgH9oz9QRy","name": "Population by Age by Ward 80-84"},
+	        {"id": "eGWVMn2WXtd.UmbuNNbNl7J","name": "Population by Age by Ward 85-89"},
+	        {"id": "eGWVMn2WXtd.prxuwAFWrjO","name": "Population by Age by Ward 90-94"},
+	        {"id": "eGWVMn2WXtd.NqIBlQRi14X","name": "Population by Age by Ward 95-99"}]}],
+	  //rows: [{"dimension": "ou","items": [{"id": "LEVEL-5"},{id: orgUnit.id}]}],
+	  rows: [{"dimension": "ou","items": orgUnitChildren}],
+	  filters: [{"dimension": "pe","items": [{id: censusPeriod}]}],
+	  hideEmptyRows: true,
+	  url: base,
+	  el: "popByAge"
+	};
+ 
+ //create a pie for male and female for the current org and then a table for the lower
+ var commsBySexTable = {
+		 columns: [{"dimension": "viZLXsCX9L1","items": [{"id": "AVmrNyIIMWO","name": "No difficulty"},
+		          {"id": "jO0sOHrj13D","name": "Some difficulty"},
+		          {"id": "nOqdz1JU1cN","name": "A lot of difficulty"},
+		          {"id": "rktkCvEnTsP","name": "Cannot do at all"},
+		          {"id": "sB0bfs1R1nZ","name": "Do not know"},
+		          {"id": "GC2gH088ggh","name": "Cannot yet be determined"}]},
+		          {"dimension": "NJEphFlHptZ","items": [{"id": "suoez1BkgFA","name": "Female"},{"id": "YxTjwU6bqj5","name": "Male"}]}],
+		rows: [{"dimension": "dx","items": [{"id": "vw6vceKHecq","name": "Communication by Sex by Ward"}]}],
+		filters: [{"dimension": "ou","items": [{id: orgUnit.id}]},
+		          {"dimension": "pe","items": [{id: censusPeriod}]}],
+		showColTotals: false,
+		showRowTotals: false,
+		showColSubTotals: false,
+		showRowSubTotals: false,
+		url: base,
+		el: "commsBySex"
+	};
+
+ reportTablePlugin.load([popAgeTable, commsBySexTable, popGroupTable, HIVKnowledgeTable, maritalStatusTable, intergenerationalSexTable, HIVRiskPerceptionTable, 
+                         sexualPartnersTable, sexualDebutAgeTable, condomUseTable, headcountSAMPITable]);
+
+Ext.onReady(function() {
+
+	DHIS.getMap({
+	  mapViews: [{
+	      columns: [{"dimension": "dx","items": [{"id": "IFYumLRGWRo","dimensionItemType": "DATA_ELEMENT"}]}],
+	      rows: [{dimension: "ou",items: orgUnitChildren}],
+	      filters: [{"dimension": "pe","items": [{id: "2016"}]}],
+	      valueType: "de",
+	      layer: "thematic1",
+	      hidden: false,
+	      colorScale: "#eff3ff,#bdd7e7,#6baed6,#3182bd,#08519c",
+	      aggregationType: "DEFAULT"
+	    }
+	  ],
+	  url: base,
+	  el: "populationMap"
+	});
+	
+	/* DHIS.getMap({
+		  mapViews: [{
+		      columns: [{"dimension": "dx","items": [{"id": "eGWVMn2WXtd","dimensionItemType": "DATA_ELEMENT"}]}],
+		      rows: [{dimension: "ou",items: orgUnitChildren}],
+		      filters: [{"dimension": "pe","items": [{id: censusPeriod}]}],
+		      valueType: "de",
+		      layer: "thematic1",
+		      hidden: false,
+		      colorScale: "#eff3ff,#bdd7e7,#6baed6,#3182bd,#08519c",
+		      aggregationType: "DEFAULT"
+		    }
+		  ],
+		  url: base,
+		  el: "map2"
+		}); */
+
+	});
+</script>
+
+</body>
+</html>
