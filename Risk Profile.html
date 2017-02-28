@@ -4,46 +4,71 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 <link rel="stylesheet" href="../dhis-web-commons/javascripts/ext/resources/css/ext-plugin-gray.css" />
+<link href="../dhis-web-commons/javascripts/nvd3/nv.d3.css" rel="stylesheet">
+<style type="text/css">
+
+.dChart {
+	display:block;
+	margin: auto;
+	align:center;
+}
+
+.dTable {
+	margin: auto;
+	display:block;
+	width: 30%;
+}
+
+.rChart {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 800px;
+	height: 700px;
+}
+</style>
 </head>
 <body>
 
 <h2>Socio-Demographics</h2>
 
-<div id="populationSize" style="width:1300px; height:400px">Population size</div>
-<div id="populationMap" style="width:800px; height:400px">Population 2016</div>
-
+<div id="popByAge" class='rChart nvd3'>Population by age</div>
+<br>
+<div id="populationSize" style="width:1300px; height:400px" class='dChart'>Population size</div>
+<!--  <div id="populationMap" style="width:800px; height:400px" class='dChart'>Population 2016</div> -->
+<br>
 <!--  <div id="popDistribution" style="width:800px; height:200px">Population distribution Pie Chart</div> -->
 
-<div id="popGroup" style="width:800px; height:400px">Population Group</div>
-<div id="popGroupTable">Population Group</div>
+<div >
+<span id="popGroup" style="width:800px; height:400px" class='dChart'>Population Group</span>
+<span id="popGroupTable" class='dTable'>Population Group</span>
+</div>
+
+<div id="HIVKnowledge" style="width:800px; height:400px" class='dChart'>HIV Knowledge</div>
+<div id="HIVKnowledgeTable"  class='dTable'>HIV Knowledge</div>
 <br>
-<div id="popByAge" >Population by age</div>
+<div id="maritalStatus" style="width:800px; height:400px" class='dChart'>Marital Status</div>
+<div id="maritalStatusTable" class='dTable'>Marital Status</div>
 <br>
-<div id="HIVKnowledge" style="width:800px; height:400px">HIV Knowledge</div>
-<div id="HIVKnowledgeTable">HIV Knowledge</div>
-
-<div id="maritalStatus" style="width:800px; height:400px">Marital Status</div>
-<div id="maritalStatusTable">Marital Status</div>
-
-<div id="intergenerationalSex" style="width:800px; height:400px">Intergenerational Sex</div>
-<div id="intergenerationalSexTable">Intergenerational Sex</div>
-
-<div id="HIVRiskPerception" style="width:800px; height:400px">HIV Risk Perception</div>
-<div id="HIVRiskPerceptionTable">HIV Risk Perception</div>
-
-<div id="sexualPartners" style="width:800px; height:400px">Sexual Partners</div>
-<div id="sexualPartnersTable">Sexual Partners</div>
-
-<div id="sexualDebutAge" style="width:800px; height:400px">Sexual Debut Age</div>
-<div id="sexualDebutAgeTable">Sexual Debut Age</div>
-
-<div id="condomUse" style="width:800px; height:400px">Condom Use</div>
-<div id="condomUseTable">Condom Use</div>
+<div id="intergenerationalSex" style="width:900px; height:400px" class='dChart'>Intergenerational Sex</div>
+<div id="intergenerationalSexTable" class='dTable'>Intergenerational Sex</div>
 <br>
-<div id="commsBySex" >Communication by Sex</div>
+<div id="HIVRiskPerception" style="width:800px; height:400px" class='dChart'>HIV Risk Perception</div>
+<div id="HIVRiskPerceptionTable" class='dTable'>HIV Risk Perception</div>
 <br>
-<div id="HeadcountSAMPI" style="width:800px; height:400px">SAMPI Headcount</div>
-<div id="headcountSAMPITable">SAMPI Headcount</div>
+<div id="sexualPartners" style="width:800px; height:400px" class='dChart'>Sexual Partners</div>
+<div id="sexualPartnersTable" class='dTable'>Sexual Partners</div>
+<br>
+<div id="sexualDebutAge" style="width:800px; height:400px" class='dChart'>Sexual Debut Age</div>
+<div id="sexualDebutAgeTable" class='dTable'>Sexual Debut Age</div>
+<br>
+<div id="condomUse" style="width:800px; height:400px" class='dChart'>Condom Use</div>
+<div id="condomUseTable" class='dTable'>Condom Use</div>
+<br>
+<div id="commsBySex" class='dTable'>Communication by Sex</div>
+<br>
+<div id="HeadcountSAMPI" style="width:800px; height:400px" class='dChart'>SAMPI Headcount</div>
+<div id="headcountSAMPITable" class='dTable'>SAMPI Headcount</div>
 
 <!-- Script libraries -->
 <script type="text/javascript" src="../dhis-web-commons/javascripts/jQuery/jquery.min.js"></script>
@@ -51,6 +76,10 @@
 
 <script type="text/javascript" src="../dhis-web-commons/javascripts/ext/ext-all.js"></script>
 <script src="../dhis-web-commons/bootstrap/js/bootstrap.min.js"></script>
+
+<script src="../dhis-web-commons/javascripts/d3/d3.min.js"></script>
+<script src="../dhis-web-commons/javascripts/nvd3/nv.d3.min.js"></script>
+
 <script type="text/javascript" src="../dhis-web-visualizer/chart.js"></script>
 <script type="text/javascript" src="../dhis-web-mapping/map.js"></script>
 <script type="text/javascript" src="../dhis-web-pivot/reporttable.js"></script>
@@ -68,9 +97,117 @@ var HSRCsurveyPeriod = '2012';
 
 var base = '../';
 
-console.log
 chartPlugin.url = base;
 reportTablePlugin.url = base;
+
+function replacePlus(x){
+	
+	if (x.indexOf('+') > -1){
+		x = x.replace('+','');
+	}
+	return x;
+}
+
+function compare(a,b) {
+	
+	var aArr = (replacePlus(a.Age)).split('-');
+	var bArr = (replacePlus(b.Age)).split('-');
+	
+  return bArr[0]-aArr[0];
+}
+
+function drawPopulationPyramid(){  
+    
+	var opts = {
+ 	"dom": "popByAge",
+	"x": "Age",
+	"y": "Population",
+	"group": "Gender",
+	"type": "multiBarHorizontalChart",
+	"id": "popByAge" 
+	},
+
+	popJson = base + 'api/25/analytics.json?dimension=pe:2011&dimension=NJEphFlHptZ&dimension=eZyrEqYYmX5&filter=ou:'+ orgUnit.id +'&filter=dx:SyM8BrVCwII&outputIdScheme=NAME';
+	
+	
+   dhisJson = d3.json(popJson, function(error, djson) {
+    	
+    	if (error) return console.error(error);
+  	 
+  	  	
+  	  data = [];	
+  	  for (var i=0, il= djson.rows.length; i<il; i++) {
+  		  //neg if male
+  			var valObj = {};
+  		  
+  		 	valObj['Age'] = djson.rows[i][2];
+  		 	var gender = djson.rows[i][1];
+  		 	valObj['Gender'] = gender;
+  		 	var value = parseFloat(djson.rows[i][3]);
+  		 	valObj['abs'] = value;
+  		 	if (gender === 'Male'){
+  		 		value = value * -1;
+  		 	}
+  			
+  			valObj['Population'] = value;
+  			data.push(valObj);
+  	  }
+  	  data.sort(compare);
+  	
+    	  if(!(opts.type==="pieChart" || opts.type==="sparklinePlus" || opts.type==="bulletChart")) {
+    	        var data = d3.nest()
+    	          .key(function(d){
+    	            //return opts.group === undefined ? 'main' : d[opts.group]
+    	            //instead of main would think a better default is opts.x
+    	            return opts.group === undefined ? opts.y : d[opts.group];
+    	          })
+    	          .entries(data);
+    	      }
+    	      
+    	      if (opts.disabled != undefined){
+    	        data.map(function(d, i){
+    	          d.disabled = opts.disabled[i]
+    	        })
+    	      }
+    	      
+    	      nv.addGraph(function() {
+    	        var chart = nv.models[opts.type]()
+    	          .width(opts.width)
+    	          .height(opts.height)
+    	          
+    	        if (opts.type != "bulletChart"){
+    	          chart
+    	            .x(function(d) { return d[opts.x] })
+    	            .y(function(d) { return d[opts.y] })
+    	        }
+    	          
+    	         
+    	        chart
+    	  		.stacked(true)
+    	  		.tooltipContent( function(key, x, y, e){
+    	        
+    	  		var format = d3.format('0,000');
+    	        return '<h3>' + key + ', age ' + x + '</h3>' + '<p>' + 'Population: ' + format(e.point.abs) + '</p>' } )
+    	  		.color([ "darkred" , "darkblue" ])
+    	        
+    	        chart.yAxis
+    	  		.axisLabel("Population")
+    	  		.tickFormat( function(d) {
+    	                          return d3.format(',.0f')(Math.abs(d) / 1000) + 'K'
+    	                          } )
+    	      
+    	       d3.select("#" + opts.id)
+    	        .append('svg')
+    	        .datum(data)
+    	        .transition().duration(500)
+    	        .call(chart);
+
+    	       nv.utils.windowResize(chart.update);
+    	       return chart;
+    	      });
+    });
+    
+}
 
 var populationSize = {
 	columns: [{"dimension": "dx",items: [{"id": "IFYumLRGWRo","name": "Population size"}]}],
@@ -244,7 +381,7 @@ var sexualDebutAgeTable = {
 	showColTotals: false,
 	showRowTotals: false,
 	url: base,
-	el: "reportTable1"
+	el: "sexualDebutAgeTable"
 		          }
 
 var condomUse = {
@@ -295,7 +432,10 @@ var headcountSAMPITable = {
 chartPlugin.load([populationSize, popGroup, HIVKnowledge, maritalStatus, intergenerationalSex, 
                   HIVRiskPerception, sexualPartners, sexualDebutAge, condomUse, headcountSAMPI]);
 
- var popAgeTable = {
+
+drawPopulationPyramid();
+
+/*  var popAgeTable = {
 	  columns: [{"dimension": "dx","items": [{"id": "eGWVMn2WXtd.TIQWX8NZRSZ","name": "Population by Age by Ward 0-4"},
 	        {"id": "eGWVMn2WXtd.rYly5JbyJ6o","name": "Population by Age by Ward 10-14"},
 	        {"id": "eGWVMn2WXtd.R4xe1C7RvjE","name": "Population by Age by Ward 100-104"},
@@ -326,7 +466,7 @@ chartPlugin.load([populationSize, popGroup, HIVKnowledge, maritalStatus, interge
 	  hideEmptyRows: true,
 	  url: base,
 	  el: "popByAge"
-	};
+	}; */
  
  //create a pie for male and female for the current org and then a table for the lower
  var commsBySexTable = {
@@ -348,16 +488,40 @@ chartPlugin.load([populationSize, popGroup, HIVKnowledge, maritalStatus, interge
 		el: "commsBySex"
 	};
 
- reportTablePlugin.load([popAgeTable, commsBySexTable, popGroupTable, HIVKnowledgeTable, maritalStatusTable, intergenerationalSexTable, HIVRiskPerceptionTable, 
+ reportTablePlugin.load([commsBySexTable, popGroupTable, HIVKnowledgeTable, maritalStatusTable, intergenerationalSexTable, HIVRiskPerceptionTable, 
                          sexualPartnersTable, sexualDebutAgeTable, condomUseTable, headcountSAMPITable]);
 
 Ext.onReady(function() {
 
-	DHIS.getMap({
+	/* DHIS.getMap({
+		  "mapViews": [{
+		      "columns": [{"dimension": "dx","items": [{"id": "eGWVMn2WXtd","dimensionItemType": "DATA_ELEMENT"}]}],
+		      "rows": [{"dimension": "ou","items": [{"id": "LEVEL-4"},{id: orgUnit.id}]}],
+		      "filters": [{"dimension": "pe","items": [{"id": "2011"}]}],
+		      "valueType": "de",
+		      "layer": "thematic1",
+		      "hidden": false,
+		      "colorScale": "#ffffd4,#fed98e,#fe9929,#d95f0e,#993404"
+		    },
+		    {"rows": [{"dimension": "ou","items": [{"id": "LEVEL-6"},
+		            {"id": "LEVEL-1"},
+		            {"id": "LEVEL-2"},
+		            {"id": "LEVEL-3"},
+		            {"id": "LEVEL-4"},
+		            {"id": "JLA7wl59oN3"}]}],
+		      "layer": "boundary"
+		    }],
+		  "url": base,
+		  "el": "populationMap"
+		}); */
+	
+	
+	
+	/* DHIS.getMap({
 	  mapViews: [{
-	      columns: [{"dimension": "dx","items": [{"id": "IFYumLRGWRo","dimensionItemType": "DATA_ELEMENT"}]}],
+	      columns: [{"dimension": "dx","items": [{"id": "eGWVMn2WXtd","dimensionItemType": "DATA_ELEMENT"}]}],
 	      rows: [{dimension: "ou",items: orgUnitChildren}],
-	      filters: [{"dimension": "pe","items": [{id: "2016"}]}],
+	      filters: [{"dimension": "pe","items": [{id: "2011"}]}],
 	      valueType: "de",
 	      layer: "thematic1",
 	      hidden: false,
@@ -367,7 +531,7 @@ Ext.onReady(function() {
 	  ],
 	  url: base,
 	  el: "populationMap"
-	});
+	}); */
 	
 	/* DHIS.getMap({
 		  mapViews: [{
